@@ -60,6 +60,7 @@ class WordProcessor:
 
         text_replacements = 0
         image_insertions = 0
+        images_requested = 0
 
         for placeholder, config_data in self.config['placeholders'].items():
             column_name = config_data['column']
@@ -75,10 +76,11 @@ class WordProcessor:
                 replacements = self._replace_text_placeholder(doc, placeholder, str(value))
                 text_replacements += replacements
             elif placeholder_type == 'image':
+                images_requested += 1
                 insertions = self._replace_image_placeholder(doc, placeholder, value)
                 image_insertions += insertions
 
-                # NOTE: В полной версии здесь будет обработка колонтитулов
+        # NOTE: В полной версии здесь будет обработка колонтитулов
         # self._process_headers_and_footers(doc, row_data)
 
         doc.save(output_path)
@@ -86,7 +88,8 @@ class WordProcessor:
 
         return {
             'text_replacements': text_replacements,
-            'image_insertions': image_insertions
+            'image_insertions': image_insertions,
+            'images_requested': images_requested
         }
 
     def _replace_text_placeholder(self, doc, placeholder, value):
@@ -165,3 +168,17 @@ class WordProcessor:
                     return image_path
 
         return None
+
+    def update_statistics(self, stats, text_replacements, image_insertions, images_requested):
+        """Обновление статистики операций"""
+        stats.add_text_replacements(text_replacements)
+        stats.add_image_insertions(image_insertions)
+        stats.add_document_created()
+
+        images_found = image_insertions
+        images_not_found = images_requested - image_insertions
+
+        for _ in range(images_found):
+            stats.add_image_found()
+        for _ in range(images_not_found):
+            stats.add_image_not_found()

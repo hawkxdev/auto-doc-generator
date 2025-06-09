@@ -79,7 +79,10 @@ def main():
         log_info("🔄 Обработка записей...")
 
         from src.core.pdf_converter import PDFConverter
+        from src.utils.statistics import Statistics
+
         pdf_converter = PDFConverter(config)
+        stats = Statistics()
 
         total_rows = len(excel_processor.data)
         success_count = 0
@@ -92,7 +95,18 @@ def main():
             pdf_output = Path(config['output']['pdf_folder']) / f"{filename}.pdf"
 
             try:
-                stats = word_processor.create_document_from_template(row_data, str(word_output))
+                doc_stats = word_processor.create_document_from_template(row_data, str(word_output))
+
+                stats.add_text_replacements(doc_stats['text_replacements'])
+                stats.add_image_insertions(doc_stats['image_insertions'])
+                stats.add_document_created()
+
+                images_found = doc_stats['image_insertions']
+                images_not_found = doc_stats['images_requested'] - images_found
+                for _ in range(images_found):
+                    stats.add_image_found()
+                for _ in range(images_not_found):
+                    stats.add_image_not_found()
 
                 if config['processing']['create_pdf']:
                     pdf_success = pdf_converter.convert_word_to_pdf(str(word_output), str(pdf_output))
@@ -104,6 +118,7 @@ def main():
                 success_count += 1
 
             except Exception as e:
+                stats.add_error()
                 log_error(f"Ошибка создания документа {filename}: {e}")
 
         log_info("📋 Создание отчета...")
@@ -113,7 +128,11 @@ def main():
         log_info("   📊 Детальная отчетность доступна в полной версии")
 
         log_separator()
-        log_success(f"✅ Создано {success_count}/{total_rows} документов")
+
+        for line in stats.get_formatted_summary():
+            log_info(line)
+
+        log_success(f"✅ Обработка завершена успешно!")
         log_info("🎯 Демо-версия завершена! Для PDF и отчетности используйте полную версию")
 
     except KeyboardInterrupt:
