@@ -62,7 +62,12 @@ def main():
 
         log_step("Обработка данных")
         log_info("📊 Загрузка Excel данных...")
-        # TODO: Добавить ExcelProcessor
+
+        from src.core.excel_processor import ExcelProcessor
+        excel_processor = ExcelProcessor(config)
+        excel_processor.load_file(config['input']['excel_file'])
+        excel_processor.validate_structure()
+        excel_processor.clean_data()
 
         log_info("📄 Загрузка Word шаблона...")
         # TODO: Добавить WordProcessor
