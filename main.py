@@ -70,7 +70,10 @@ def main():
         excel_processor.clean_data()
 
         log_info("📄 Загрузка Word шаблона...")
-        # TODO: Добавить WordProcessor
+
+        from src.core.word_processor import WordProcessor
+        word_processor = WordProcessor(config)
+        word_processor.load_template(config['input']['word_template'])
 
         log_step("Генерация документов")
         log_info("🔄 Обработка записей...")
