@@ -9,21 +9,17 @@ wheels/
 # Virtual environments
 .venv
 
-.cursor
+# Demo working files
+# output/word/*.docx
+# output/pdf/*.pdf
+# output/report.xlsx
+# data/*.xlsx
+# data/*.docx
 
-*.xlsx
-!data/my_data.xlsx
-*.docx
-!data/template.docx
-*.jpg
-!images/аксонометрии/image.jpg
-!images/узлы/image.jpg
-*.pdf
-
+# Temporary files
 .DS_Store
 
+.cursor
 *.xml
 *.zip
-data/untitled folder
-
 Tutorial.mp4

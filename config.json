@@ -1,0 +1,66 @@
+{
+    "input": {
+        "excel_file": "data/Демо таблица.xlsx",
+        "word_template": "data/Демо шаблон.docx",
+        "images_folder": "images/",
+        "images_subdirectories": {
+            "аксонометрии": "аксонометрии",
+            "узлы": "узлы"
+        }
+    },
+    "output": {
+        "word_folder": "output/word/",
+        "pdf_folder": "output/pdf/",
+        "report_file": "output/report.xlsx"
+    },
+    "processing": {
+        "image_height_inches": 3.0,
+        "hide_word_windows": true,
+        "create_pdf": true
+    },
+    "placeholders": {
+        "{НОМЕР ОТЧЕТА}": {
+            "column": "Номер отчета",
+            "type": "text"
+        },
+        "{НАЗВАНИЕ ОБЪЕКТА}": {
+            "column": "Наименование объекта",
+            "type": "text"
+        },
+        "{АДРЕС ОБЪЕКТА}": {
+            "column": "Адрес объекта",
+            "type": "text"
+        },
+        "{ДЕМОНТАЖ}": {
+            "column": "Демонтаж",
+            "type": "text"
+        },
+        "{НАИМЕНОВАНИЕ СЧЕТЧИКА}": {
+            "column": "Наименование счетчика",
+            "type": "text"
+        },
+        "{МИН РАСХОД}": {
+            "column": "Мин расход",
+            "type": "text"
+        },
+        "{МАКС РАСХОД}": {
+            "column": "Макс расход",
+            "type": "text"
+        },
+        "{ИСПОЛНЕНИЕ}": {
+            "column": "Исполнение",
+            "type": "text"
+        },
+        "{АКСОНОМЕТРИЯ}": {
+            "column": "Аксонометрия",
+            "type": "image"
+        },
+        "{УЗЕЛ}": {
+            "column": "Узел",
+            "type": "image"
+        }
+    },
+    "excel_columns": {
+        "naming_column": "Номер отчета"
+    }
+}
