@@ -77,13 +77,44 @@ def main():
 
         log_step("Генерация документов")
         log_info("🔄 Обработка записей...")
-        # TODO: Добавить цикл обработки
+
+        from src.core.pdf_converter import PDFConverter
+        pdf_converter = PDFConverter(config)
+
+        total_rows = len(excel_processor.data)
+        success_count = 0
+
+        for row_index, row_data in excel_processor.data.iterrows():
+            log_info(f"📄 ФАЙЛ {row_index + 1:04d}:")
+
+            filename = excel_processor.get_naming_column_value(row_data, row_index + 1)
+            word_output = Path(config['output']['word_folder']) / f"{filename}.docx"
+            pdf_output = Path(config['output']['pdf_folder']) / f"{filename}.pdf"
+
+            try:
+                stats = word_processor.create_document_from_template(row_data, str(word_output))
+
+                if config['processing']['create_pdf']:
+                    pdf_success = pdf_converter.convert_word_to_pdf(str(word_output), str(pdf_output))
+                    if not pdf_success:
+                        log_info("   📄 Word документ создан, PDF - в полной версии")
+                else:
+                    log_info("   📄 Word документ создан")
+
+                success_count += 1
+
+            except Exception as e:
+                log_error(f"Ошибка создания документа {filename}: {e}")
 
         log_info("📋 Создание отчета...")
-        # TODO: Добавить ReportGenerator
+        # NOTE: В полной версии здесь будет ReportGenerator
+        # report_generator = ReportGenerator(config)
+        # report_generator.generate_excel_report()
+        log_info("   📊 Детальная отчетность доступна в полной версии")
 
         log_separator()
-        log_success("✅ Обработка завершена успешно!")
+        log_success(f"✅ Создано {success_count}/{total_rows} документов")
+        log_info("🎯 Демо-версия завершена! Для PDF и отчетности используйте полную версию")
 
     except KeyboardInterrupt:
         log_error("⚠️ Прервано пользователем")
