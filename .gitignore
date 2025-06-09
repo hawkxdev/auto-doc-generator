@@ -10,3 +10,20 @@ wheels/
 .venv
 
 .cursor
+
+*.xlsx
+!data/my_data.xlsx
+*.docx
+!data/template.docx
+*.jpg
+!images/аксонометрии/image.jpg
+!images/узлы/image.jpg
+*.pdf
+
+.DS_Store
+
+*.xml
+*.zip
+data/untitled folder
+
+Tutorial.mp4
